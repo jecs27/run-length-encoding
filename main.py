@@ -5,10 +5,8 @@ def encode_count(count, char):
         return char * 2
     elif count < 10:       
         return f'{char}({count})'
-    elif count < 36:
+    else:
         return f'{char}({chr(87 + count)})'
-    else: 
-        return f'{char}({count})'
 
 def compress(cadena):
     if not cadena:
@@ -30,18 +28,47 @@ def compress(cadena):
     compressed_str = ''.join(compressed)
     return compressed_str 
 
-# casos de Pruebas
+
+def decompress(compressed):
+    result = []
+    i = 0
+    while i < len(compressed):
+        char = compressed[i]
+        i += 1
+        if i < len(compressed) and compressed[i] == '(':
+            count = ''
+            i += 1
+            while compressed[i] != ')':
+                count += compressed[i]
+                i += 1
+            i += 1
+            if count.isalpha():
+                count = ord(count) - 87
+            else:
+                count = int(count)
+            result.extend([char] * count)
+        else:
+            result.append(char)
+    return ''.join(result)
+
+
+# Pruebas
 test_cases = [
     "AABBBCCCC",
     "WWWWWWWWWWWWWWWWWWWW",
     "ABCDE",
     "AABBCCDDEE",
     "AAAAABBBBBBBBBBBBBBB",
-    "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWAAA"
+    "A",
+    "AA",
     ""
 ]
 
 for case in test_cases:
+    compressed = compress(case)
+    decompressed = decompress(compressed)
     print(f"Original: {case}")
-    print(f"Comprimido: {compress(case)}")
+    print(f"Comprimido: {compressed}")
+    print(f"Descomprimido: {decompressed}")
+    print(f"¿Coinciden?: {case == decompressed}")
     print()
