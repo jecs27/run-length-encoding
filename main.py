@@ -10,8 +10,9 @@ def encode_count(count, char):
 
 def compress(cadena):
     if not cadena:
-        return f' la cadena no puede estar vacía'
-
+        return f'la cadena no puede estar vacía'
+    if not cadena.isalpha():
+        return f'la cadena solo puede contener letras'
     compressed = []
     char = cadena[0]
     count = 1
@@ -30,6 +31,8 @@ def compress(cadena):
 
 
 def decompress(compressed):
+    if not compressed:
+        return f'la cadena no puede estar vacía'
     result = []
     i = 0
     while i < len(compressed):
@@ -50,25 +53,3 @@ def decompress(compressed):
         else:
             result.append(char)
     return ''.join(result)
-
-
-# Pruebas
-test_cases = [
-    "AABBBCCCC",
-    "WWWWWWWWWWWWWWWWWWWW",
-    "ABCDE",
-    "AABBCCDDEE",
-    "AAAAABBBBBBBBBBBBBBB",
-    "A",
-    "AA",
-    ""
-]
-
-for case in test_cases:
-    compressed = compress(case)
-    decompressed = decompress(compressed)
-    print(f"Original: {case}")
-    print(f"Comprimido: {compressed}")
-    print(f"Descomprimido: {decompressed}")
-    print(f"¿Coinciden?: {case == decompressed}")
-    print()
